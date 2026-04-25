@@ -26,8 +26,8 @@
 ## 📸 Capturas
 
 <div align="center">
-  <img src="assets/screenshot_download.png" alt="Pestaña de Descarga" width="45%">
-  <img src="assets/screenshot_library.png" alt="Pestaña de Biblioteca" width="45%">
+  <img src="assets/download.png" alt="Pestaña de Descarga" width="45%">
+  <img src="assets/library.png" alt="Pestaña de Biblioteca" width="45%">
 </div>
 
 *(Reemplaza las rutas con tus propias capturas)*
@@ -39,9 +39,10 @@
 ### 1. Clonar el repositorio
 ```bash
 git clone https://github.com/FranciscoGB03/descargador.git
-cd downloader
+cd downloader/linux
 ```
 ### 2. Instalar dependencias
+Puedes crear un ambiente virtual: [AMBIENTE_VIRTUAL](INSTALL.md)
 ```bash
 pip3 install -r requirements.txt
 ```
@@ -125,7 +126,7 @@ youtube-downloader/
 | `python3` (≥3.10) | ✅ Requerido | Incluido en repositorios oficiales |
 | `tkinter` | ✅ Requerido | `sudo apt install python3-tk` |
 | `ffmpeg` / `ffprobe` | ✅ **Incluido** | Empaquetado en `bin/linux/` (~150MB) |
-| `ffplay` | ⚠️ **Sistema** | Necesario para reproducción. Guía completa: [REQUISITOS_FFMPEG.md](REQUISITOS_FFMPEG.md) |
+| `ffplay` | ⚠️ **Sistema** | Necesario para reproducción. Guía completa: [REQUISITOS_FFMPEG.md](FFPLAY.md) |
 
 > 💡 Si solo usas la app para descargar/convertir, **no necesitas instalar nada extra**. `ffplay` solo es requerido para la pestaña Biblioteca.
 
@@ -137,7 +138,7 @@ youtube-downloader/
 |--------|----------|
 | `No module named 'customtkinter'` | `pip3 install -r requirements.txt` |
 | Ventana en blanco / no abre | Ejecuta con `python3 -u main.py` y revisa la consola |
-| `ffplay: command not found` | Sigue [REQUISITOS_FFMPEG.md](REQUISITOS_FFMPEG.md) |
+| `ffplay: command not found` | Sigue [REQUISITOS_FFMPEG.md](FFPLAY.md) |
 | Video sin imagen en Wayland | Ejecuta: `export SDL_VIDEODRIVER=x11` antes de abrir la app |
 | Procesos `ffplay` zombies | La app los limpia automáticamente al cerrar. Si persisten: `pkill -9 ffplay` |
 
