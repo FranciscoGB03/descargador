@@ -1,132 +1,178 @@
-# YouTube Downloader
+# 🎬 YouTube Downloader & Player
 
-Un descargador de video y audio de YouTube compatible con Windows y Linux, con interfaz gráfica fácil de usar.
+> Tu centro multimedia personal para YouTube. Descarga, convierte y reproduce contenido sin salir de la aplicación.  
+> Diseñado para Linux, optimizado para velocidad y simplicidad.
 
-## Características
+![Platform](https://img.shields.io/badge/OS-Linux-blue?logo=linux)
+![Python](https://img.shields.io/badge/Python-3.10+-green?logo=python)
+![FFmpeg](https://img.shields.io/badge/FFmpeg-Bundled-orange?logo=ffmpeg)
+![License](https://img.shields.io/badge/License-MIT-yellow)
 
-- 🎥 Descarga videos en formato MP4 y MKV
-- 🎵 Descarga audio en formato MP3
-- 🖥️ Interfaz gráfica intuitiva con tkinter
-- 🪟 Compatible con Windows y Linux
-- 📦 Genera ejecutable independiente (no requiere Python)
-- 📊 Barra de progreso en tiempo real
-- 🎯 Selección de calidad (Alta, Media, Baja)
-- 📁 Carpeta de descarga personalizable
+---
 
-## Requisitos
+## ✨ Características
 
-- Python 3.7 o superior
-- Conexión a internet
+| Función | Descripción |
+|--------|-------------|
+| ⬇️ **Descarga Inteligente** | Soporte para videos, audio (MP3) y playlists completas con selector de rangos |
+| 🎧 **Reproductor Integrado** | Control de volumen, reproducción continua y navegación `⏮ ⏭` en tiempo real |
+| 📁 **Biblioteca Persistente** | Recuerda tu última carpeta y escanea automáticamente archivos multimedia |
+| ⚡ **FFmpeg Incluido** | Conversión y encoding optimizado sin instalar dependencias pesadas |
+| 🐧 **Linux First** | Compatible con X11/Wayland, PulseAudio/PipeWire y gestores de paquetes modernos |
+| 🎨 **UI Moderna** | Interfaz limpia con `CustomTkinter`, tema oscuro nativo y diseño responsive |
 
-## Instalación
+---
 
-### 1. Clonar o descargar el proyecto
+## 📸 Capturas
 
+<div align="center">
+  <img src="assets/screenshot_download.png" alt="Pestaña de Descarga" width="45%">
+  <img src="assets/screenshot_library.png" alt="Pestaña de Biblioteca" width="45%">
+</div>
+
+*(Reemplaza las rutas con tus propias capturas)*
+
+---
+
+## 🚀 Inicio Rápido
+
+### 1. Clonar el repositorio
 ```bash
-git clone <repository-url>
-cd descargador
+git clone https://github.com/FranciscoGB03/descargador.git
+cd downloader
 ```
-
 ### 2. Instalar dependencias
+```bash
+pip3 install -r requirements.txt
+```
+
+### 3. Ejecutar
+```bash
+python3 main.py
+```
+
+> ✅ La app se abrirá con el tema oscuro activado y lista para descargar.
+
+---
+
+## 📖 Uso Básico
+
+### ⬇️ Pestaña Descargar
+1. Pega la URL de YouTube (video o playlist)
+2. Selecciona formato: `MP4`, `MP3` o `MKV`
+3. Elige carpeta de destino (se guarda automáticamente para futuras sesiones)
+4. Activa `Descargar playlist completa` y define rangos si es necesario
+5. Haz clic en `⬇️ Descargar` y observa el progreso en tiempo real
+
+### 🎧 Pestaña Biblioteca
+1. Selecciona una carpeta con archivos multimedia
+2. La app escaneará y listará automáticamente `.mp3`, `.mp4`, `.mkv`, `.flac`, etc.
+3. Usa los controles:
+   - `⏮ / ⏭` → Navegar entre pistas
+   - `▶️ Todo` → Reproducir lista completa en orden
+   - `🔊 Slider` → Ajustar volumen del sistema en tiempo real
+   - `⏹ Detener` → Parar reproducción inmediatamente
+
+---
+
+## 📦 Compilar Ejecutable (Standalone)
+
+Genera un binario portable que **no requiere Python instalado**:
 
 ```bash
-pip install -r requirements.txt
+# 1. Instalar PyInstaller
+pip3 install pyinstaller
+
+# 2. Ejecutar script de compilación
+python3 build_linux.py
+
+# 3. El ejecutable estará en:
+./dist/YouTubeDownloader
 ```
 
-### 3. Ejecutar la aplicación
+> 📌 El ejecutable incluye `ffmpeg` y `ffprobe`. Solo requiere `ffplay` en el sistema para reproducción (ver requisitos).
 
-#### Opción A: Modo desarrollo
-```bash
-python main.py
-```
+---
 
-#### Opción B: Generar ejecutable
-```bash
-python build.py
-```
-
-El ejecutable se creará en la carpeta `dist/`:
-- Windows: `YouTubeDownloader.exe`
-- Linux: `YouTubeDownloader`
-
-## Uso
-
-1. **Iniciar la aplicación**: Ejecuta el archivo `main.py` o el ejecutable generado
-2. **Pegar la URL**: Ingresa la URL del video de YouTube que quieres descargar
-3. **Seleccionar formato**: Elige entre MP4 (video), MP3 (audio), o MKV (video)
-4. **Elegir calidad**: Selecciona la calidad deseada (solo para video)
-5. **Carpeta de descarga**: Usa la carpeta predeterminada (Downloads) o elige otra
-6. **Descargar**: Haz clic en el botón "Descargar" y espera a que termine
-
-## Formatos soportados
-
-### Video
-- **MP4**: Formato universal compatible con la mayoría de los dispositivos
-- **MKV**: Alta calidad, soporta múltiples pistas de audio/subtítulos
-
-### Audio
-- **MP3**: Formato de audio comprimido, compatible con todos los dispositivos
-
-## Calidades disponibles
-
-- **Alta**: Hasta 720p (video) / 192 kbps (audio)
-- **Media**: Hasta 480p (video) / 128 kbps (audio)
-- **Baja**: Hasta 360p (video) / 96 kbps (audio)
-
-## Estructura del proyecto
+## 🗂️ Estructura del Proyecto
 
 ```
-descargador/
-├── main.py              # Aplicación principal
-├── build.py             # Script para generar ejecutable
-├── requirements.txt     # Dependencias de Python
-├── README.md           # Este archivo
-└── dist/               # Carpeta con el ejecutable (generada)
+youtube-downloader/
+├── main.py                 # Punto de entrada
+├── requirements.txt        # Dependencias Python
+├── build_linux.py          # Script de compilación PyInstaller
+├── REQUISITOS_FFMPEG.md    # Guía completa de instalación de ffplay
+├── core/
+│   ├── downloader.py       # Lógica de descarga con yt-dlp
+│   ├── player.py           # Motor de reproducción con ffplay
+│   ├── library.py          # Escáner de biblioteca local
+│   └── utils.py            # Detección cross-platform de binarios
+├── ui/
+│   └── main_window.py      # Interfaz con CustomTkinter
+├── bin/
+│   └── linux/              # FFmpeg/FFprobe empaquetados
+└── scripts/
+    ├── download_ffmpeg.py  # Descargador automático de binarios
+    └── check_requirements.sh # Verificador de dependencias
 ```
 
-## Dependencias
+---
 
-- `yt-dlp`: Biblioteca principal para descargar videos de YouTube
-- `tkinter`: Interfaz gráfica (incluida con Python)
+## ⚠️ Requisitos Importantes
 
-## Solución de problemas
+| Componente | Estado | Notas |
+|-----------|--------|-------|
+| `python3` (≥3.10) | ✅ Requerido | Incluido en repositorios oficiales |
+| `tkinter` | ✅ Requerido | `sudo apt install python3-tk` |
+| `ffmpeg` / `ffprobe` | ✅ **Incluido** | Empaquetado en `bin/linux/` (~150MB) |
+| `ffplay` | ⚠️ **Sistema** | Necesario para reproducción. Guía completa: [REQUISITOS_FFMPEG.md](REQUISITOS_FFMPEG.md) |
 
-### Error: "URL no válida"
-- Asegúrate de que la URL sea de YouTube (youtube.com, youtu.be)
-- Verifica que el video sea público y no privado
+> 💡 Si solo usas la app para descargar/convertir, **no necesitas instalar nada extra**. `ffplay` solo es requerido para la pestaña Biblioteca.
 
-### Error: "No se pudo descargar el video"
-- Verifica tu conexión a internet
-- Algunos videos pueden tener restricciones de descarga
-- Intenta con otra calidad o formato
+---
 
-### En Linux: "Permiso denegado"
-- Asegúrate de que el ejecutable tenga permisos de ejecución:
-```bash
-chmod +x dist/YouTubeDownloader
-```
+## 🛠️ Solución Rápida de Problemas
 
-### En Windows: "Antivirus bloquea el archivo"
-- El ejecutable puede ser detectado como falso positivo
-- Agrega una excepción en tu antivirus para el archivo
+| Síntoma | Solución |
+|--------|----------|
+| `No module named 'customtkinter'` | `pip3 install -r requirements.txt` |
+| Ventana en blanco / no abre | Ejecuta con `python3 -u main.py` y revisa la consola |
+| `ffplay: command not found` | Sigue [REQUISITOS_FFMPEG.md](REQUISITOS_FFMPEG.md) |
+| Video sin imagen en Wayland | Ejecuta: `export SDL_VIDEODRIVER=x11` antes de abrir la app |
+| Procesos `ffplay` zombies | La app los limpia automáticamente al cerrar. Si persisten: `pkill -9 ffplay` |
 
-## Desarrollo
+---
 
-### Modificar la aplicación
-- El código principal está en `main.py`
-- La interfaz usa tkinter y es completamente personalizable
-- La lógica de descarga usa yt-dlp
+## 🤝 Contribuir
 
-### Regenerar el ejecutable
-- Después de modificar el código, ejecuta `python build.py`
-- El nuevo ejecutable reemplazará al anterior en `dist/`
+Las contribuciones son bienvenidas. Para colaborar:
 
-## Licencia
+1. Haz fork del repositorio
+2. Crea una rama: `git checkout -b feature/nueva-funcion`
+3. Realiza tus cambios y haz commit: `git commit -m 'feat: descripción clara'`
+4. Push a la rama: `git push origin feature/nueva-funcion`
+5. Abre un Pull Request
 
-Este proyecto es de código abierto y libre para usar, modificar y distribuir.
+> 📝 Sigue el estilo PEP8 y añade comentarios donde sea necesario.
 
-## Créditos
+---
 
-- [yt-dlp](https://github.com/yt-dlp/yt-dlp): Biblioteca principal para descargas
-- [tkinter](https://docs.python.org/3/library/tkinter.html): Interfaz gráfica
-- [PyInstaller](https://pyinstaller.org/): Creación de ejecutables
+## 📄 Licencia
+
+Este proyecto está bajo la licencia **MIT**. Puedes usarlo, modificarlo y distribuirlo libremente.  
+Ver [LICENSE](LICENSE) para más detalles.
+
+---
+
+## 🙏 Agradecimientos
+
+- [`yt-dlp`](https://github.com/yt-dlp/yt-dlp) → Motor de descarga robusto y actualizado
+- [`CustomTkinter`](https://github.com/TomSchimansky/CustomTkinter) → UI moderna y nativa
+- [`FFmpeg`](https://ffmpeg.org/) → Suite multimedia estándar de la industria
+- Comunidad Linux → Por mantener el ecosistema abierto y accesible
+
+---
+
+<div align="center">
+  <sub>Hecho con ❤️ y ☕ para la comunidad Linux</sub>
+</div>
