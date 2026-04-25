@@ -10,15 +10,11 @@ class YouTubeDownloader:
         self._stop_event = threading.Event()
 
     def _get_ffmpeg_path(self) -> str:
-        """Busca ffmpeg compatible con script normal y .exe compilado"""
         import sys
         
-        # Determinar la base correcta según si está compilado o no
         if getattr(sys, 'frozen', False):
-            # Ejecutándose como .exe compilado
             base_dir = sys._MEIPASS
         else:
-            # Ejecutándose como script normal
             base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         
         candidates = [
@@ -32,7 +28,6 @@ class YouTubeDownloader:
             if os.path.exists(path):
                 return path
         
-        # Fallback: buscar en PATH del sistema
         import shutil
         return shutil.which("ffmpeg") or "ffmpeg"
 
