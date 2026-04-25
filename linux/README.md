@@ -30,8 +30,6 @@
   <img src="assets/library.png" alt="Pestaña de Biblioteca" width="45%">
 </div>
 
-*(Reemplaza las rutas con tus propias capturas)*
-
 ---
 
 ## 🚀 Inicio Rápido
