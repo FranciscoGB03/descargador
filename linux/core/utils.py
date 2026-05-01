@@ -11,6 +11,7 @@ import sys
 import platform
 from pathlib import Path
 from typing import Optional
+from core.ytdlp_updater import get_ytdlp_path as _updater_path
 
 
 def get_base_dir() -> str:
@@ -155,3 +156,7 @@ def is_windows() -> bool:
 def normalize_path(path: str) -> str:
     """Normaliza rutas para el sistema operativo actual"""
     return os.path.normpath(path)
+
+def get_ytdlp_path() -> str:
+    """Wrapper para usar la lógica centralizada de yt-dlp"""
+    return _updater_path()

@@ -8,6 +8,8 @@ Mejoras: Reproducir Todo + Control de Volumen + Persistencia de Carpetas
 import customtkinter as ctk
 import tkinter as tk
 import tkinter.filedialog as filedialog
+import tkinter.messagebox as messagebox
+import threading
 import os
 import sys
 import json
@@ -20,6 +22,8 @@ from core.downloader import YouTubeDownloader
 from core.player import PlayerEngine
 from core.utils import get_base_dir, get_ffmpeg_path, is_linux
 from core.tooltip import ToolTip
+from core.ytdlp_updater import check_versions, download_update
+
 
 class MainWindow(ctk.CTk):
     def __init__(self):
@@ -27,6 +31,17 @@ class MainWindow(ctk.CTk):
         self.title("YouTube Downloader & Player")
         self.geometry("800x600")
         self.minsize(800, 600)
+
+        # ═══════════════════════════════════════════════════════════
+        # 📜 MENÚ SUPERIOR
+        # ═══════════════════════════════════════════════════════════
+        menubar = tk.Menu(self, tearoff=0)
+        help_menu = tk.Menu(menubar, tearoff=0)
+        help_menu.add_command(label="Check yt-dlp Updates", command=self._check_ytdlp_update)
+        help_menu.add_separator()
+        help_menu.add_command(label="About", command=lambda: messagebox.showinfo("About", "YouTube Downloader & Player v1.0\nCreado con ❤️ y CustomTkinter 2026 pgonbo"))
+        menubar.add_cascade(label="Help", menu=help_menu)
+        self.config(menu=menubar)
         
         # Configuración de apariencia
         ctk.set_appearance_mode("dark")
@@ -598,6 +613,50 @@ class MainWindow(ctk.CTk):
             else:
                 self.status_label.configure(text="Reproduciendo", text_color="#2ECC71")
 
+    def _check_ytdlp_update(self):
+        """Verifica y descarga actualización de yt-dlp sin bloquear la UI"""
+        if not self.winfo_exists():
+            return
+
+        self.status_label.configure(text="🔍 Verificando versión de yt-dlp...", text_color="#FFA500")
+        
+        def worker():
+            try:
+                current, latest = check_versions()
+                
+                if latest == "desconocida" or current == "desconocida":
+                    self.after(0, lambda: self.status_label.configure(
+                        text="⚠️ No se pudo verificar (sin conexión?)", text_color="#FFA500"))
+                    return
+
+                if current == latest:
+                    self.after(0, lambda: self.status_label.configure(
+                        text=f"✅ yt-dlp actualizado ({current})", text_color="#2ECC71"))
+                    self.after(0, lambda: messagebox.showinfo("Update", f"yt-dlp ya está en su última versión: {current}"))
+                    return
+
+                # Hay nueva versión → Descargar
+                self.after(0, lambda: self.status_label.configure(
+                    text=f"⬇️ Descargando yt-dlp ({current} → {latest})...", text_color="#3498DB"))
+                
+                success, msg = download_update()
+                
+                if success:
+                    self.after(0, lambda: self.status_label.configure(
+                        text="✅ ¡yt-dlp actualizado correctamente!", text_color="#2ECC71"))
+                    self.after(0, lambda: messagebox.showinfo("Update", msg))
+                else:
+                    self.after(0, lambda: self.status_label.configure(
+                        text="❌ Fallo en actualización", text_color="#E74C3C"))
+                    self.after(0, lambda: messagebox.showerror("Error", msg))
+                    
+            except Exception as e:
+                self.after(0, lambda: self.status_label.configure(
+                    text="⚠️ Error en verificación", text_color="#E74C3C"))
+                self.after(0, lambda: messagebox.showerror("Error", str(e)))
+
+        threading.Thread(target=worker, daemon=True).start()    
+
     # ═══════════════════════════════════════════════════════════
     # 🚪 CLEANUP AL CERRAR
     # ═══════════════════════════════════════════════════════════
@@ -613,3 +672,5 @@ class MainWindow(ctk.CTk):
             pass
         finally:
             self.destroy()
+
+    
