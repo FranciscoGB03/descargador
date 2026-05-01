@@ -5,7 +5,6 @@ Ventana principal de la aplicación - UI con CustomTkinter
 Compatible con Windows y Linux
 Mejoras: Reproducir Todo + Control de Volumen + Persistencia de Carpetas
 """
-
 import customtkinter as ctk
 import tkinter as tk
 import tkinter.filedialog as filedialog
@@ -20,14 +19,14 @@ from typing import Optional
 from core.downloader import YouTubeDownloader
 from core.player import PlayerEngine
 from core.utils import get_base_dir, get_ffmpeg_path, is_linux
-
+from core.tooltip import ToolTip
 
 class MainWindow(ctk.CTk):
     def __init__(self):
         super().__init__()
         self.title("YouTube Downloader & Player")
-        self.geometry("700x600")
-        self.minsize(700, 600)
+        self.geometry("800x600")
+        self.minsize(800, 600)
         
         # Configuración de apariencia
         ctk.set_appearance_mode("dark")
@@ -261,9 +260,18 @@ class MainWindow(ctk.CTk):
         btn_frame.pack_propagate(False)
 
         # Botones de navegación
-        ctk.CTkButton(btn_frame, text="⏮ Anterior", width=100, command=self._prev_track).pack(side="left", padx=(15, 5), pady=10)
-        ctk.CTkButton(btn_frame, text="⏹ Detener", width=100, fg_color="#E74C3C", hover_color="#C0392B", command=self._stop_playback).pack(side="left", padx=5, pady=10)
-        ctk.CTkButton(btn_frame, text="⏭ Siguiente", width=100, command=self._next_track).pack(side="left", padx=5, pady=10)
+        btn_prev=ctk.CTkButton(btn_frame, text="⏮", width=50, command=self._prev_track)
+        btn_prev.pack(side="left", padx=(15, 5), pady=10)
+        ToolTip(btn_prev, "Pista anterior", delay=0.3)
+        btn_stop=ctk.CTkButton(btn_frame, text="⏹", width=50, fg_color="#E74C3C", hover_color="#C0392B", command=self._stop_playback)
+        btn_stop.pack(side="left", padx=5, pady=10)
+        ToolTip(btn_stop, "Detener reproducción", delay=0.3)
+        btn_pause=ctk.CTkButton(btn_frame, text="⏯", width=50, fg_color="#3498DB", hover_color="#2980B9", command=self._pause_playback)
+        btn_pause.pack(side="left", padx=5, pady=10)
+        ToolTip(btn_pause, "Pausar/Reanudar", delay=0.3)
+        btn_next=ctk.CTkButton(btn_frame, text="⏭", width=50, command=self._next_track)
+        btn_next.pack(side="left", padx=5, pady=10)
+        ToolTip(btn_next, "Siguiente pista", delay=0.3)
         
         # 🎵 NUEVO: Botón Reproducir Todo
         ctk.CTkButton(
@@ -576,6 +584,19 @@ class MainWindow(ctk.CTk):
     def _prev_track(self):
         """Retrocede a la pista anterior"""
         self.player.prev_track()
+
+    def _pause_playback(self):
+        """Pausa o reanuda la reproducción"""
+        self.player.pause()
+        # Actualizar estado visual
+        if self.player.is_paused:
+            self.status_label.configure(text="⏸ Pausado", text_color="#FFA500")
+        else:
+            if 0 <= self.player.current_index < len(self.player.playlist):
+                fname = os.path.basename(self.player.playlist[self.player.current_index])
+                self.status_label.configure(text=f"▶ Reproduciendo: {fname}", text_color="#2ECC71")
+            else:
+                self.status_label.configure(text="Reproduciendo", text_color="#2ECC71")
 
     # ═══════════════════════════════════════════════════════════
     # 🚪 CLEANUP AL CERRAR

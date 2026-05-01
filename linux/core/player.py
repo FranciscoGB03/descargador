@@ -11,6 +11,7 @@ import threading
 import time
 from typing import List, Callable, Optional
 from core.utils import get_ffplay_path, get_base_dir, is_linux
+import signal
 
 
 class PlayerEngine:
@@ -221,3 +222,23 @@ class PlayerEngine:
         # Limpiar flag
         if hasattr(self, '_skip_loading_on_finish'):
             delattr(self, '_skip_loading_on_finish')
+
+    def pause(self):
+        """Pausa o reanuda la reproducción"""
+        if self._process and self._process.poll() is None:
+            if is_linux():
+                # En Linux, enviar SIGSTOP/SIGCONT
+                if self.is_playing:
+                    print("⏸ Pausando (SIGSTOP)")
+                    self._process.send_signal(signal.SIGSTOP)
+                    self.is_playing = False
+                else:
+                    print("▶️ Reanudando (SIGCONT)")
+                    self._process.send_signal(signal.SIGCONT)
+                    self.is_playing = True
+            else:
+                # En Windows, no hay forma nativa de pausar, así que solo toggle el estado
+                print("⚠️ Pausa no soportada en Windows, toggle estado")
+                self.is_playing = not self.is_playing
+        else:
+            print("⚠️ No hay proceso activo para pausar/reanudar")
